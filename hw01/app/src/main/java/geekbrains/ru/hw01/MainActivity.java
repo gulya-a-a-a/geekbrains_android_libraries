@@ -6,7 +6,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import java.util.List;
 
@@ -53,6 +54,22 @@ public class MainActivity extends AppCompatActivity implements MainView {
     protected void onPause() {
         super.onPause();
         mPresenter.unbindView();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.add_counter_action) {
+            mPresenter.onAddItemClicked();
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 
     @Override

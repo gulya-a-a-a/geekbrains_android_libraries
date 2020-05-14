@@ -9,7 +9,7 @@ public class Counter {
         return mId;
     }
 
-    public void setId(int id) {
+    void setId(int id) {
         mId = id;
     }
 
@@ -17,7 +17,7 @@ public class Counter {
         return mName;
     }
 
-    public void setName(String name) {
+    void setName(String name) {
         mName = name;
     }
 

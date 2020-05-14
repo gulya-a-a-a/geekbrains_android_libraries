@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public class CounterRepo {
-    private static int INIT_COUNTER_QUANTITY = 5;
+    private static final int INIT_COUNTER_QUANTITY = 3;
     private static CounterRepo instance;
     private static int nextID = 1;
 
@@ -36,7 +36,7 @@ public class CounterRepo {
     }
 
     @SuppressLint("DefaultLocale")
-    private void addCounter(@NonNull Counter counter) {
+    public void addCounter(@NonNull Counter counter) {
         int id = nextID++;
         counter.setId(id);
         counter.setName(String.format("Счетчик %d", id));

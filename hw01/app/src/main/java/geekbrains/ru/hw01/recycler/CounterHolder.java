@@ -9,8 +9,6 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.w3c.dom.Text;
-
 import geekbrains.ru.hw01.R;
 import geekbrains.ru.hw01.presenters.CounterPresenter;
 import geekbrains.ru.hw01.views.CounterView;

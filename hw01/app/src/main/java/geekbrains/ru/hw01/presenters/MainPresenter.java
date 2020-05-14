@@ -20,4 +20,11 @@ public class MainPresenter extends BasePresenter<List<Counter>, MainView> {
         if (mModel == null)
             setModel(CounterRepo.getInstance().getCounterList());
     }
+
+    public void onAddItemClicked() {
+        Counter counter = new Counter();
+        CounterRepo.getInstance().addCounter(counter);
+        mModel.add(counter);
+        updateView();
+    }
 }
