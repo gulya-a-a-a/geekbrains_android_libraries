@@ -81,6 +81,11 @@ public class ActivityHW02 extends AppCompatActivity {
             obs.subscribe(mPublisherSubject);
         });
 
+        Button button3 = findViewById(R.id.button3);
+        button3.setOnClickListener(v->{
+            mPublisherSubject.onNext(99);
+        });
+
         bottomText1 = findViewById(R.id.textView1);
         bottomText2 = findViewById(R.id.textView2);
     }
@@ -102,7 +107,6 @@ public class ActivityHW02 extends AppCompatActivity {
                 Thread.sleep(1000);
                 emitter.onNext(s);
             }
-            emitter.onComplete();
         });
     }
 
