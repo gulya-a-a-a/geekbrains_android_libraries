@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -16,7 +17,6 @@ import geekbrains.ru.hw01.R;
 import io.reactivex.Observable;
 
 import io.reactivex.Observer;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -24,11 +24,9 @@ import io.reactivex.subjects.PublishSubject;
 
 public class ActivityHW02 extends AppCompatActivity {
 
-    private TextView mTextView, bottomText;
+    private TextView mTextView, bottomText1, bottomText2;
     private PublishSubject<Integer> mPublisherSubject;
-    private Button button1, button2;
     private List<Integer> list1, list2;
-    private Observable<Integer> obs1, obs2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,16 +61,28 @@ public class ActivityHW02 extends AppCompatActivity {
             }
         });
 
-        button1 = findViewById(R.id.button1);
+        Button button1 = findViewById(R.id.button1);
         button1.setOnClickListener(v -> {
-            Observable<Integer> obs1 = getObserverable(list1).
+            Observable<Integer> obs = getObserverable(list1).
                     subscribeOn(Schedulers.newThread()).
                     observeOn(AndroidSchedulers.mainThread());
-            mPublisherSubject.subscribe(getObserver(0));
-            obs1.subscribe(mPublisherSubject);
+            mPublisherSubject.subscribe(getObserver(1));
+            mPublisherSubject.subscribe(getObserver(2));
+            obs.subscribe(mPublisherSubject);
         });
-        button2 = findViewById(R.id.button2);
-        bottomText = findViewById(R.id.textView1);
+
+        Button button2 = findViewById(R.id.button2);
+        button2.setOnClickListener(v -> {
+            Observable<Integer> obs = getObserverable(list2).
+                    subscribeOn(Schedulers.newThread()).
+                    observeOn(AndroidSchedulers.mainThread());
+            mPublisherSubject.subscribe(getObserver(2));
+            mPublisherSubject.subscribe(getObserver(1));
+            obs.subscribe(mPublisherSubject);
+        });
+
+        bottomText1 = findViewById(R.id.textView1);
+        bottomText2 = findViewById(R.id.textView2);
     }
 
 
@@ -110,7 +120,10 @@ public class ActivityHW02 extends AppCompatActivity {
 
             @Override
             public void onNext(Integer integer) {
-                bottomText.setText(String.format("Integer: %d", integer));
+                if (id == 1)
+                    bottomText1.setText(String.format("List%d: %d", id, integer));
+                else
+                    bottomText2.setText(String.format("List%d %d", id, integer));
             }
 
             @Override
