@@ -9,11 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="geekbrains.ru.hw01.MainActivity">
+        <activity android:name="geekbrains.ru.hw01.MainActivity"></activity>
 
-        </activity>
+        <activity android:name="geekbrains.ru.hw02.ActivityHW02"></activity>
 
-        <activity android:name="geekbrains.ru.hw02.ActivityHW02" >
+        <activity android:name="geekbrains.ru.hw03.ActivityHW03">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

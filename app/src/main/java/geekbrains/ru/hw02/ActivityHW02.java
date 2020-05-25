@@ -1,11 +1,10 @@
 package geekbrains.ru.hw02;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -13,14 +12,26 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import geekbrains.ru.hw01.PresenterManager;
 import geekbrains.ru.hw01.R;
 import io.reactivex.Observable;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
+
+interface SimpleTextWatcher extends TextWatcher {
+    @Override
+    default void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    }
+
+    @Override
+    default void onTextChanged(CharSequence s, int start, int before, int count) {
+    }
+}
 
 public class ActivityHW02 extends AppCompatActivity {
 
@@ -28,10 +39,19 @@ public class ActivityHW02 extends AppCompatActivity {
     private PublishSubject<Integer> mPublisherSubject;
     private List<Integer> list1, list2;
 
+    private PresenterHW02 mPresenterHW02;
+    private Disposable mDisposable;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hw2);
+
+        if (savedInstanceState == null)
+            mPresenterHW02 = new PresenterHW02();
+        else
+            mPresenterHW02 = (PresenterHW02) PresenterManager.getInstance().restorePresenter(savedInstanceState);
+
 
         publisherCreate();
 
@@ -44,22 +64,6 @@ public class ActivityHW02 extends AppCompatActivity {
     private void initControls() {
         EditText mEditText = findViewById(R.id.editText);
         mTextView = findViewById(R.id.textView);
-        mEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                mTextView.setText(s);
-            }
-        });
 
         Button button1 = findViewById(R.id.button1);
         button1.setOnClickListener(v -> {
@@ -82,7 +86,7 @@ public class ActivityHW02 extends AppCompatActivity {
         });
 
         Button button3 = findViewById(R.id.button3);
-        button3.setOnClickListener(v->{
+        button3.setOnClickListener(v -> {
             mPublisherSubject.onNext(99);
         });
 
@@ -99,6 +103,25 @@ public class ActivityHW02 extends AppCompatActivity {
             list2.add(i * 2);
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Observable<String> observable = Observable.create(emitter -> {
+            ((EditText) findViewById(R.id.editText))
+                    .addTextChangedListener(
+                            (SimpleTextWatcher) (editable -> emitter.onNext(editable.toString())));
+        });
+
+        mDisposable = mPresenterHW02.bindView(observable, value -> ((TextView) findViewById(R.id.textView)).setText(value));
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        PresenterManager.getInstance().savePresenter(mPresenterHW02, outState);
     }
 
     private Observable<Integer> getObserverable(List<Integer> list) {
