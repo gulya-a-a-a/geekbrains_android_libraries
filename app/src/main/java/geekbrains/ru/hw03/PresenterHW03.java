@@ -17,27 +17,23 @@ import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DefaultObserver;
 
 import geekbrains.ru.hw01.presenters.BasePresenter;
-import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 import static geekbrains.ru.hw03.ImageConvertionView.REQUEST_IMAGE_CODE;
 import static geekbrains.ru.hw03.ImageConvertionView.WRITE_IMAGE_CODE;
 
 
-abstract class DispCompl extends DisposableCompletableObserver {
-    @Override
-    public void onError(Throwable e) {
-    }
-}
-
 public class PresenterHW03 extends BasePresenter {
+
+    private final String THREAD_INFO_TAG = "THREAD_INFO";
 
     private ImageConvertionView mView;
     private Bitmap mBitmap;
-    private String mLastFileName;
+    private Disposable mCurrentDisposable;
 
     void bindView(ImageConvertionView view) {
         mView = view;
@@ -60,7 +56,6 @@ public class PresenterHW03 extends BasePresenter {
         mView.openDialog(intent, "Select image", REQUEST_IMAGE_CODE);
     }
 
-
     void initPictureConvertion(String fileName) {
         Intent intent = new Intent()
                 .setType("image/png")
@@ -71,10 +66,10 @@ public class PresenterHW03 extends BasePresenter {
         mView.openDialog(intent, "Create a file", WRITE_IMAGE_CODE);
     }
 
-    void getBitmapFromUri(Uri uri, ContentResolver contentResolver) throws IOException {
+    void getBitmapFromUri(Uri uri, ContentResolver contentResolver) {
         Observable<Bitmap> observable = Observable.create(emitter -> {
             try {
-                Log.d("THREAD INFO", Thread.currentThread().getName());
+                Log.d(THREAD_INFO_TAG, Thread.currentThread().getName());
                 ParcelFileDescriptor parcelFileDescriptor
                         = contentResolver.openFileDescriptor(uri, "r");
 
@@ -97,28 +92,41 @@ public class PresenterHW03 extends BasePresenter {
                 .observeOn(AndroidSchedulers.mainThread());
 
         observable.subscribe(new ImageObserver());
-        Log.d("THREAD INFO", Thread.currentThread().getName());
+
+        Log.d(THREAD_INFO_TAG, Thread.currentThread().getName());
     }
 
-
-    void writeConvertedImage(Uri uri, ContentResolver contentResolver) throws IOException {
+    void writeConvertedImage(Uri uri, ContentResolver contentResolver) throws NullPointerException {
         Completable comp = Completable.fromAction(() -> {
             ParcelFileDescriptor pfd = contentResolver.openFileDescriptor(uri, "w");
-            FileOutputStream fos = new FileOutputStream(Objects.requireNonNull(pfd).getFileDescriptor());
-            mBitmap.compress(Bitmap.CompressFormat.PNG, 10, fos);
-            fos.close();
-            pfd.close();
-            Log.d("THREAD INFO", Thread.currentThread().getName());
-        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
 
-        Disposable disposable = comp
+            if (pfd != null) {
+                FileOutputStream fos = new FileOutputStream(pfd.getFileDescriptor());
+                Thread.sleep(2000);
+                mBitmap.compress(Bitmap.CompressFormat.PNG, 10, fos);
+                fos.close();
+                pfd.close();
+            } else {
+                throw new NullPointerException();
+            }
+
+            Log.d(THREAD_INFO_TAG, Thread.currentThread().getName());
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        mCurrentDisposable = comp
                 .subscribe(() -> mView.showConvertionResult(ImageConvertionView.ConvertionResult.SUCCESS),
                         throwable -> {
                             mView.showConvertionResult(ImageConvertionView.ConvertionResult.FAILURE);
-                            Log.e("TAG", Objects.requireNonNull(throwable.getMessage()));
+                            Log.e("CONVERTION", Objects.requireNonNull(throwable.getMessage()));
                         });
 
-        Log.d("THREAD INFO", Thread.currentThread().getName());
+        Log.d(THREAD_INFO_TAG, Thread.currentThread().getName());
+    }
+
+    void convertionFinished() {
+        if (mCurrentDisposable.isDisposed())
+            mCurrentDisposable.dispose();
     }
 
     class ImageObserver extends DefaultObserver<Bitmap> {

@@ -2,10 +2,7 @@ package geekbrains.ru.hw03;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.ParcelFileDescriptor;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -15,9 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.FileDescriptor;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Objects;
 
 import geekbrains.ru.hw01.PresenterManager;
@@ -28,8 +22,6 @@ public class ActivityHW03 extends AppCompatActivity implements ImageConvertionVi
     private EditText mEditText;
     private Button mConvertButton;
     private ImageView mImageView;
-
-    private Bitmap mImageBitmap;
 
     private PresenterHW03 mPresenterHW03;
 
@@ -55,7 +47,8 @@ public class ActivityHW03 extends AppCompatActivity implements ImageConvertionVi
                 .setOnClickListener(v -> mPresenterHW03.initPictureOpen());
 
         mConvertButton = findViewById(R.id.convert_image_button);
-        mConvertButton.setOnClickListener(v -> mPresenterHW03.initPictureConvertion(mEditText.getText().toString()));
+        mConvertButton.setOnClickListener(v ->
+                mPresenterHW03.initPictureConvertion(mEditText.getText().toString()));
     }
 
     @Override
@@ -70,24 +63,14 @@ public class ActivityHW03 extends AppCompatActivity implements ImageConvertionVi
         PresenterManager.getInstance().savePresenter(mPresenterHW03, outState);
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_IMAGE_CODE) {
-                try {
-                    mPresenterHW03.getBitmapFromUri(Objects.requireNonNull(data).getData(), getContentResolver());
-                } catch (IOException | NullPointerException e) {
-                    setConvertionControlsState(false);
-                    e.printStackTrace();
-                }
+                mPresenterHW03.getBitmapFromUri(Objects.requireNonNull(data).getData(), getContentResolver());
             } else if (requestCode == WRITE_IMAGE_CODE) {
-                try {
-                    mPresenterHW03.writeConvertedImage(Objects.requireNonNull(data).getData(), getContentResolver());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                mPresenterHW03.writeConvertedImage(Objects.requireNonNull(data).getData(), getContentResolver());
             }
         }
     }
@@ -108,6 +91,8 @@ public class ActivityHW03 extends AppCompatActivity implements ImageConvertionVi
         Toast.makeText(this,
                 result == ConvertionResult.SUCCESS ? "Image saved" : "An error occured",
                 Toast.LENGTH_LONG).show();
+
+        mPresenterHW03.convertionFinished();
     }
 
     @Override
