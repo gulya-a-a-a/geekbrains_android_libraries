@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +16,7 @@ import geekbrains.ru.hw01.models.Counter;
 import geekbrains.ru.hw01.presenters.MainPresenter;
 import geekbrains.ru.hw01.recycler.CounterAdapter;
 import geekbrains.ru.hw01.views.MainView;
+import geekbrains.ru.hw02.ActivityHW02;
 
 public class MainActivity extends AppCompatActivity implements MainView {
     MainPresenter mPresenter;
@@ -64,10 +66,16 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.add_counter_action) {
-            mPresenter.onAddItemClicked();
-        } else {
-            return super.onOptionsItemSelected(item);
+
+        switch (item.getItemId()){
+            case R.id.add_counter_action:
+                mPresenter.onAddItemClicked();
+                break;
+            case R.id.hw02_item:
+                startHomework2Activity();
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
         }
         return true;
     }
@@ -76,4 +84,11 @@ public class MainActivity extends AppCompatActivity implements MainView {
     public void showCountersList(List<Counter> counters) {
         mAdapter.updateCounters(counters);
     }
+
+
+    private void startHomework2Activity() {
+        Intent intent = new Intent(MainActivity.this, ActivityHW02.class);
+        startActivity(intent);
+    }
+
 }

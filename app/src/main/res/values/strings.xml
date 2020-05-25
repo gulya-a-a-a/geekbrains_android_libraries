@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Homework1.MVC</string>
+    <string name="add">Add</string>
+    <string name="homework2">Homework2</string>
+    <string name="open_image">Open Image</string>
+    <string name="convert_image_to_png">Convert image to PNG</string>
+</resources>
