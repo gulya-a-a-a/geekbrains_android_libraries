@@ -6,8 +6,8 @@ import java.lang.ref.WeakReference;
 
 public abstract class BasePresenter<M, V> {
 
-    M mModel;
-    private WeakReference<V> mView;
+    protected M mModel;
+    protected WeakReference<V> mView;
 
     public abstract void updateView();
 
@@ -21,7 +21,7 @@ public abstract class BasePresenter<M, V> {
         mView = null;
     }
 
-    V getView() {
+    public V getView() {
         if (mView == null) {
             return null;
         } else {
