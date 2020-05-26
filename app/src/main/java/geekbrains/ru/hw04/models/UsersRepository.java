@@ -37,7 +37,7 @@ public class UsersRepository {
                                 @Override
                                 public void onResponse(Call<List<RetrofitUserItemModel>> call,
                                                        Response<List<RetrofitUserItemModel>> response) {
-                                    if (response.body().size() != 0)
+                                    if (response.body() != null)
                                         emitter.onNext(response.body());
                                     else
                                         emitter.onError(new NullPointerException());
@@ -51,9 +51,7 @@ public class UsersRepository {
                             });
                 });
 
-        observable.subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(userListObserver);
+        makeRequest(observable, userListObserver);
     }
 
 
@@ -78,9 +76,7 @@ public class UsersRepository {
                     });
         });
 
-        observable.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observer);
+        makeRequest(observable, observer);
     }
 
     public void requestRepoList(Observer<List<RetrofitRepoModel>> observer, String userName) {
@@ -104,6 +100,10 @@ public class UsersRepository {
                     });
         });
 
+        makeRequest(observable, observer);
+    }
+
+    private <T> void makeRequest(Observable<T> observable, Observer<T> observer) {
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);

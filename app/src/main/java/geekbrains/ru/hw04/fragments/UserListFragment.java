@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,14 +25,17 @@ import geekbrains.ru.hw04.view.UserListView;
 
 public class UserListFragment extends Fragment implements UserListView {
 
+
     public interface UserListListener {
         void onUserItemClicked(String userName);
     }
 
     private UserListPresenter mUserListPresenter;
-    private RecyclerView mRecyclerView;
     private UserListItemAdapter mUserListItemAdapter;
     private UserListListener mUserListListener;
+
+    private RecyclerView mRecyclerView;
+    private TextView mLoadingTV;
 
     @Nullable
     @Override
@@ -68,9 +72,15 @@ public class UserListFragment extends Fragment implements UserListView {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        initControls(view);
         mUserListPresenter.bindView(this);
         if (savedInstanceState == null)
             mUserListPresenter.loadUserList();
+    }
+
+    private void initControls(View view) {
+        mLoadingTV = view.findViewById(R.id.loading_text);
+        mLoadingTV.setText("Loading...");
     }
 
     private void initRecycler(View v) {
@@ -89,11 +99,13 @@ public class UserListFragment extends Fragment implements UserListView {
     @Override
     public void showError() {
         Toast.makeText(getContext(), "User list download failed", Toast.LENGTH_LONG).show();
+        mLoadingTV.setText("User list download failed");
     }
 
     @Override
     public void hideLoading() {
-
+        mLoadingTV.setVisibility(View.GONE);
+        mRecyclerView.setVisibility(View.VISIBLE);
     }
 
     private UserListItemAdapter.OnUserItemClickListener mOnUserItemClickListener =

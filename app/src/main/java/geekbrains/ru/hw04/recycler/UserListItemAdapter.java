@@ -1,11 +1,18 @@
 package geekbrains.ru.hw04.recycler;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.List;
 
@@ -53,9 +60,10 @@ public class UserListItemAdapter extends RecyclerView.Adapter<UserListItemAdapte
         notifyDataSetChanged();
     }
 
-    static class UserListItemHolder extends RecyclerView.ViewHolder {
+    static class UserListItemHolder extends RecyclerView.ViewHolder implements Target {
 
         TextView mUserNameTV;
+        ImageView mImageView;
 
         UserListItemHolder(LayoutInflater inflater, final ViewGroup parent) {
             super(inflater.inflate(R.layout.user_list_item, parent, false));
@@ -64,10 +72,27 @@ public class UserListItemAdapter extends RecyclerView.Adapter<UserListItemAdapte
 
         private void initHolderControls() {
             mUserNameTV = itemView.findViewById(R.id.user_name_text);
+            mImageView = itemView.findViewById(R.id.user_item_image);
         }
 
         void bind(RetrofitUserItemModel user) {
             mUserNameTV.setText(String.format("%s", user.getLogin()));
+            Picasso.get().load(user.getAvatarUrl()).into(this);
+        }
+
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            mImageView.setImageBitmap(bitmap);
+        }
+
+        @Override
+        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+            Log.d("TAG", "Load error");
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+            Log.d("TAG", "Load prepared");
         }
     }
 }

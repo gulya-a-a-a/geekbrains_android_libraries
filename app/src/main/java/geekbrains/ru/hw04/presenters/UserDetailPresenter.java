@@ -22,24 +22,31 @@ public class UserDetailPresenter extends BasePresenter<List<RetrofitRepoModel>, 
 
     public void loadUserInfo() {
         mUsersRepository.requestDetailedData(new UserDetailedObserver(), mSelectedName);
-        mUsersRepository.requestRepoList(new UserRepoListObserver(), mSelectedName);
     }
 
     @Override
     public void updateView() {
+    }
+
+    private void updateUserInfo() {
         getView().showUserInfo(mUserDetailModel);
+    }
+
+    private void updateRepoList() {
+        getView().showRepoInfo(mModel);
     }
 
     class UserDetailedObserver extends DefaultObserver<RetrofitUserDetailModel> {
         @Override
         public void onNext(RetrofitUserDetailModel retrofitUserDetailModel) {
             mUserDetailModel = retrofitUserDetailModel;
-            updateView();
+            updateUserInfo();
+            mUsersRepository.requestRepoList(new UserRepoListObserver(), mSelectedName);
         }
 
         @Override
         public void onError(Throwable e) {
-            
+
         }
 
         @Override
@@ -52,7 +59,7 @@ public class UserDetailPresenter extends BasePresenter<List<RetrofitRepoModel>, 
         @Override
         public void onNext(List<RetrofitRepoModel> retrofitRepoModels) {
             setModel(retrofitRepoModels);
-            updateView();
+            updateRepoList();
         }
 
         @Override

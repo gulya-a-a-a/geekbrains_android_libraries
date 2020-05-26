@@ -50,17 +50,17 @@ public class UserListPresenter extends BasePresenter<List<RetrofitUserItemModel>
     class UserListObserver extends DefaultObserver<List<RetrofitUserItemModel>> {
         @Override
         public void onNext(List<RetrofitUserItemModel> retrofitUserItemModels) {
-            UserListPresenter.this.showUserList(retrofitUserItemModels);
+            showUserList(retrofitUserItemModels);
         }
 
         @Override
         public void onError(Throwable e) {
-            UserListPresenter.this.showErrorStatement();
+            showErrorStatement();
         }
 
         @Override
         public void onComplete() {
-            UserListPresenter.this.hideLoading();
+            hideLoading();
         }
     }
 }
