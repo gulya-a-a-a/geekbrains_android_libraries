@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name="geekbrains.ru.hw05.HW05Application"
         android:allowBackup="true"
         android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
@@ -18,7 +19,9 @@
 
         <activity android:name="geekbrains.ru.hw03.ActivityHW03" />
 
-        <activity android:name="geekbrains.ru.hw04.ActivityHW04">
+        <activity android:name="geekbrains.ru.hw04.ActivityHW04" />
+
+        <activity android:name="geekbrains.ru.hw05.ActivityHW05">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -62,7 +62,7 @@ public class UserListItemAdapter extends RecyclerView.Adapter<UserListItemAdapte
 
     static class UserListItemHolder extends RecyclerView.ViewHolder implements Target {
 
-        TextView mUserNameTV;
+        TextView mUserNameTV, mUserIdTV;
         ImageView mImageView;
 
         UserListItemHolder(LayoutInflater inflater, final ViewGroup parent) {
@@ -73,10 +73,12 @@ public class UserListItemAdapter extends RecyclerView.Adapter<UserListItemAdapte
         private void initHolderControls() {
             mUserNameTV = itemView.findViewById(R.id.user_name_text);
             mImageView = itemView.findViewById(R.id.user_item_image);
+            mUserIdTV = itemView.findViewById(R.id.user_id_text);
         }
 
         void bind(RetrofitUserItemModel user) {
             mUserNameTV.setText(String.format("%s", user.getLogin()));
+            mUserIdTV.setText(String.format("%d", user.getId()));
             Picasso.get().load(user.getAvatarUrl()).into(this);
         }
 

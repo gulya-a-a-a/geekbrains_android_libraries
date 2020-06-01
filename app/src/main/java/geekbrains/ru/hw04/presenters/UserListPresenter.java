@@ -47,7 +47,7 @@ public class UserListPresenter extends BasePresenter<List<RetrofitUserItemModel>
         getView().hideLoading();
     }
 
-    class UserListObserver extends DefaultObserver<List<RetrofitUserItemModel>> {
+    public class UserListObserver extends DefaultObserver<List<RetrofitUserItemModel>> {
         @Override
         public void onNext(List<RetrofitUserItemModel> retrofitUserItemModels) {
             showUserList(retrofitUserItemModels);

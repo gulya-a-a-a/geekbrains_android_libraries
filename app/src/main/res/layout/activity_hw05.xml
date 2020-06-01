@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <Button
+        android:id="@+id/hw05_load_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Загрузить" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/hw05_write_to_db_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Запись в БД" />
+
+        <Button
+            android:id="@+id/hw05_read_from_db_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Чтение из БД" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/hw05_remove_from_db_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Удаление из БД" />
+
+    <TextView
+        android:id="@+id/hw05_info_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/hw05_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp" />
+
+
+</LinearLayout>
