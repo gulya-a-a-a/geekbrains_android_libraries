@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <Button
+        android:id="@+id/hw05_load_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Загрузить" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/hw05_write_to_db_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Запись в БД" />
+
+        <Button
+            android:id="@+id/hw05_read_from_db_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Чтение из БД" />
+
+        <Spinner
+            android:id="@+id/hw05_db_type_spinner"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/hw05_remove_from_db_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Удаление из БД" />
+
+    <TextView
+        android:id="@+id/hw05_info_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:id="@+id/hw05_progress_bar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/hw05_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp" />
+
+    </FrameLayout>
+
+
+</LinearLayout>
