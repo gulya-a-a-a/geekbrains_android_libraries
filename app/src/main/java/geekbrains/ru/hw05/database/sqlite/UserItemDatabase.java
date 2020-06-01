@@ -1,4 +1,4 @@
-package geekbrains.ru.hw05.database;
+package geekbrains.ru.hw05.database.sqlite;
 
 import androidx.room.Database;
 import androidx.room.RoomDatabase;

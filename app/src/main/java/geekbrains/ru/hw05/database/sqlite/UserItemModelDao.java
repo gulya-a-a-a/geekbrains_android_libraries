@@ -1,4 +1,4 @@
-package geekbrains.ru.hw05.database;
+package geekbrains.ru.hw05.database.sqlite;
 
 import androidx.room.Dao;
 import androidx.room.Delete;

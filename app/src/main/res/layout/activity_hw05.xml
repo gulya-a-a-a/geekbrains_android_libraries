@@ -31,6 +31,12 @@
             android:layout_weight="1"
             android:text="Чтение из БД" />
 
+        <Spinner
+            android:id="@+id/hw05_db_type_spinner"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
     </LinearLayout>
 
     <Button

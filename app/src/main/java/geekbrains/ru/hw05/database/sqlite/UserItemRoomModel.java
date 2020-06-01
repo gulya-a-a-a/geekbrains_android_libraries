@@ -1,4 +1,4 @@
-package geekbrains.ru.hw05.database;
+package geekbrains.ru.hw05.database.sqlite;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
