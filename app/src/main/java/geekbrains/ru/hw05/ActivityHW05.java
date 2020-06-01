@@ -1,6 +1,7 @@
 package geekbrains.ru.hw05;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,7 +23,7 @@ public class ActivityHW05 extends BaseActivity implements MainViewHW05 {
     private UserListItemAdapter mUserListItemAdapter;
     private RecyclerView mRecyclerView;
 
-    private TextView mInfoText;
+    private TextView mInfoText, mLoading;
 
     private PresenterHW05 mPresenterHW05;
 
@@ -37,12 +38,17 @@ public class ActivityHW05 extends BaseActivity implements MainViewHW05 {
     }
 
     private void initControls() {
-        findViewById(R.id.hw05_load_button).setOnClickListener(v -> mPresenterHW05.loadUserFromInternet());
+        findViewById(R.id.hw05_load_button).setOnClickListener(v -> {
+            mRecyclerView.setVisibility(View.GONE);
+            mLoading.setVisibility(View.VISIBLE);
+            mPresenterHW05.loadUserFromInternet();
+        });
         findViewById(R.id.hw05_write_to_db_button).setOnClickListener(v -> mPresenterHW05.writeUsersToDb());
         findViewById(R.id.hw05_read_from_db_button).setOnClickListener(v -> mPresenterHW05.readUsersFromDb());
         findViewById(R.id.hw05_remove_from_db_button).setOnClickListener(v -> mPresenterHW05.removeUsersFromDb());
 
         mInfoText = findViewById(R.id.hw05_info_text);
+        mLoading = findViewById(R.id.hw05_loading_text);
     }
 
     private void initPresenter(@Nullable Bundle savedInstanceState) {
@@ -83,6 +89,7 @@ public class ActivityHW05 extends BaseActivity implements MainViewHW05 {
     @Override
     public void showUserList(List<RetrofitUserItemModel> retrofitUserItemModels) {
         mUserListItemAdapter.setUserList(retrofitUserItemModels);
+        mRecyclerView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -97,6 +104,6 @@ public class ActivityHW05 extends BaseActivity implements MainViewHW05 {
 
     @Override
     public void hideLoading() {
-
+        mLoading.setVisibility(View.GONE);
     }
 }

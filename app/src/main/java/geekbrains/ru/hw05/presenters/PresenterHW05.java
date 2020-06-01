@@ -3,6 +3,8 @@ package geekbrains.ru.hw05.presenters;
 import android.app.Application;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +19,7 @@ import geekbrains.ru.hw05.database.UserItemRoomModel;
 import geekbrains.ru.hw05.views.MainViewHW05;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DefaultObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -30,7 +33,7 @@ public class PresenterHW05 extends BasePresenter<List<UserItemRoomModel>, MainVi
 
     @Override
     public void updateView() {
-
+        getView().showUserList(loadedUsers);
     }
 
     public void loadUserFromInternet() {
@@ -39,6 +42,11 @@ public class PresenterHW05 extends BasePresenter<List<UserItemRoomModel>, MainVi
         }
     }
 
+    @Override
+    public void bindView(@NonNull MainViewHW05 view) {
+        super.bindView(view);
+        updateView();
+    }
 
     public void writeUsersToDb() {
         List<UserItemRoomModel> userModels = UserItemModelMapper.transform(loadedUsers);
@@ -49,11 +57,11 @@ public class PresenterHW05 extends BasePresenter<List<UserItemRoomModel>, MainVi
             List<UserItemRoomModel> tempList = HW05Application.getInstance().getDao().getAll();
             Bundle bundle = new Bundle();
             bundle.putInt("count", tempList.size());
-            bundle.putLong("msek", finish.getTime() - start.getTime());
+            bundle.putLong("msec", finish.getTime() - start.getTime());
             emitter.onSuccess(bundle);
         });
         singleSaveAllUsers = singleSaveAllUsers.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
-        singleSaveAllUsers.subscribe((bundle, throwable) -> {
+        Disposable disposable = singleSaveAllUsers.subscribe((bundle, throwable) -> {
             getView().showDbResult(bundle);
         });
     }
@@ -67,11 +75,13 @@ public class PresenterHW05 extends BasePresenter<List<UserItemRoomModel>, MainVi
             Date finish = new Date();
             Bundle bundle = new Bundle();
             bundle.putInt("count", tempList.size());
-            bundle.putLong("msek", finish.getTime() - start.getTime());
+            bundle.putLong("msec", finish.getTime() - start.getTime());
             emitter.onSuccess(bundle);
         });
-        singleSaveAllUsers = singleSaveAllUsers.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
-        singleSaveAllUsers.subscribe((bundle, throwable) -> {
+        singleSaveAllUsers = singleSaveAllUsers.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        Disposable disposable = singleSaveAllUsers.subscribe((bundle, throwable) -> {
             getView().showDbResult(bundle);
         });
     }
@@ -86,18 +96,18 @@ public class PresenterHW05 extends BasePresenter<List<UserItemRoomModel>, MainVi
             List<UserItemRoomModel> tempList = HW05Application.getInstance().getDao().getAll();
             Bundle bundle = new Bundle();
             bundle.putInt("count", tempList.size());
-            bundle.putLong("msek", finish.getTime() - start.getTime());
+            bundle.putLong("msec", finish.getTime() - start.getTime());
             emitter.onSuccess(bundle);
         });
         singleSaveAllUsers = singleSaveAllUsers.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
-        singleSaveAllUsers.subscribe((bundle, throwable) -> {
+        Disposable disposable = singleSaveAllUsers.subscribe((bundle, throwable) -> {
             getView().showDbResult(bundle);
         });
     }
 
     private void showUserList(List<RetrofitUserItemModel> retrofitUserItemModels) {
         loadedUsers = retrofitUserItemModels;
-        getView().showUserList(retrofitUserItemModels);
+        updateView();
     }
 
     public class UserListObserver extends DefaultObserver<List<RetrofitUserItemModel>> {
@@ -108,12 +118,12 @@ public class PresenterHW05 extends BasePresenter<List<UserItemRoomModel>, MainVi
 
         @Override
         public void onError(Throwable e) {
-
+            getView().showError();
         }
 
         @Override
         public void onComplete() {
-
+            getView().hideLoading();
         }
     }
 
