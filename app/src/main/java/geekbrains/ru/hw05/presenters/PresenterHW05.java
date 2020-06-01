@@ -1,18 +1,15 @@
 package geekbrains.ru.hw05.presenters;
 
-import android.app.Application;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 import geekbrains.ru.hw01.presenters.BasePresenter;
 import geekbrains.ru.hw04.models.UsersRepository;
 import geekbrains.ru.hw04.retrofit.RetrofitUserItemModel;
-import geekbrains.ru.hw04.view.UserListView;
 import geekbrains.ru.hw05.HW05Application;
 import geekbrains.ru.hw05.database.UserItemModelMapper;
 import geekbrains.ru.hw05.database.UserItemRoomModel;
@@ -49,10 +46,9 @@ public class PresenterHW05 extends BasePresenter<List<UserItemRoomModel>, MainVi
     }
 
     public void writeUsersToDb() {
-        List<UserItemRoomModel> userModels = UserItemModelMapper.transform(loadedUsers);
         Single<Bundle> singleSaveAllUsers = Single.create(emitter -> {
             Date start = new Date();
-            HW05Application.getInstance().getDao().insertAll(userModels);
+            HW05Application.getInstance().getDao().insertAll(UserItemModelMapper.transform(loadedUsers));
             Date finish = new Date();
             List<UserItemRoomModel> tempList = HW05Application.getInstance().getDao().getAll();
             Bundle bundle = new Bundle();
@@ -68,7 +64,6 @@ public class PresenterHW05 extends BasePresenter<List<UserItemRoomModel>, MainVi
 
 
     public void readUsersFromDb() {
-        List<UserItemRoomModel> userModels = UserItemModelMapper.transform(loadedUsers);
         Single<Bundle> singleSaveAllUsers = Single.create(emitter -> {
             Date start = new Date();
             List<UserItemRoomModel> tempList = HW05Application.getInstance().getDao().getAll();
@@ -88,7 +83,6 @@ public class PresenterHW05 extends BasePresenter<List<UserItemRoomModel>, MainVi
 
 
     public void removeUsersFromDb() {
-        List<UserItemRoomModel> userModels = UserItemModelMapper.transform(loadedUsers);
         Single<Bundle> singleSaveAllUsers = Single.create(emitter -> {
             Date start = new Date();
             HW05Application.getInstance().getDao().deleteAll();

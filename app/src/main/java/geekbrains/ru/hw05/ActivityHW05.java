@@ -2,6 +2,7 @@ package geekbrains.ru.hw05;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,7 +24,8 @@ public class ActivityHW05 extends BaseActivity implements MainViewHW05 {
     private UserListItemAdapter mUserListItemAdapter;
     private RecyclerView mRecyclerView;
 
-    private TextView mInfoText, mLoading;
+    private TextView mInfoText;
+    ProgressBar mLoading;
 
     private PresenterHW05 mPresenterHW05;
 
@@ -48,7 +50,7 @@ public class ActivityHW05 extends BaseActivity implements MainViewHW05 {
         findViewById(R.id.hw05_remove_from_db_button).setOnClickListener(v -> mPresenterHW05.removeUsersFromDb());
 
         mInfoText = findViewById(R.id.hw05_info_text);
-        mLoading = findViewById(R.id.hw05_loading_text);
+        mLoading = findViewById(R.id.hw05_progress_bar);
     }
 
     private void initPresenter(@Nullable Bundle savedInstanceState) {
