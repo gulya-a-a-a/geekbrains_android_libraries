@@ -28,7 +28,7 @@ public class ActivityHW05 extends BaseActivity implements MainViewHW05, AdapterV
     private RecyclerView mRecyclerView;
 
     private TextView mInfoText;
-    ProgressBar mLoading;
+    private ProgressBar mLoading;
 
     private PresenterHW05 mPresenterHW05;
 

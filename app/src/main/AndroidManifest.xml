@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="geekbrains.ru.hw01">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name="geekbrains.ru.hw05.HW05Application"
-        android:allowBackup="true"
+        android:name="geekbrains.ru.hw06.ApplicationHW06"
+        android:allowBackup="false"
         android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:replace="android:icon">
+
         <activity android:name="geekbrains.ru.hw01.MainActivity" />
 
         <activity android:name="geekbrains.ru.hw02.ActivityHW02" />
@@ -21,13 +25,17 @@
 
         <activity android:name="geekbrains.ru.hw04.ActivityHW04" />
 
-        <activity android:name="geekbrains.ru.hw05.ActivityHW05">
+        <activity android:name="geekbrains.ru.hw05.ActivityHW05" />
+
+        <activity android:name="geekbrains.ru.hw06.ActivityHW06">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
     </application>
 
 </manifest>

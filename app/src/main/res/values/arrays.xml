@@ -3,5 +3,6 @@
     <string-array name="db_types_array">
         <item>SQlite</item>
         <item>Realm</item>
+        <item>Sugar</item>
     </string-array>
 </resources>
